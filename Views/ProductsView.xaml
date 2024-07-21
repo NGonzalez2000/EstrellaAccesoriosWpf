@@ -1,0 +1,91 @@
+﻿<common:View
+    x:Class="EstrellaAccesoriosWpf.Views.ProductView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:EstrellaAccesoriosWpf.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:filters="clr-namespace:EstrellaAccesoriosWpf.Filters.FiltersView"
+    xmlns:local="clr-namespace:EstrellaAccesoriosWpf.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:EstrellaAccesoriosWpf.ViewModels"
+    Title="PRODUCTOS"
+    d:DataContext="{d:DesignInstance Type=viewModels:ProductViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <common:View.ButtonsContent>
+        <StackPanel
+            Margin="10"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
+            <Button
+                Margin="10,0"
+                Command="{Binding Path=CreateCommand}"
+                Content="CREAR" />
+            <Button
+                Margin="10,0"
+                Command="{Binding Path=UpdateCommand}"
+                Content="EDITAR" />
+            <Button
+                Margin="10,0"
+                Command="{Binding Path=DeleteCommand}"
+                Content="ELIMINAR" />
+        </StackPanel>
+    </common:View.ButtonsContent>
+    <common:View.FilterContent>
+        <filters:ProductFilterView DataContext="{Binding FilterViewModel}" />
+    </common:View.FilterContent>
+    <common:View.MainContent>
+        <ListView
+            ItemsSource="{Binding Path=Products}"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible"
+            SelectedItem="{Binding Path=SelectedItem}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Code}" Header="CODIGO" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="DESCRIPCION" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Category.Description}" Header="CATEGORIA" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=SubCategory.Description}" Header="SUBCATEGORIA" />
+                    <GridViewColumn Header="PRECIO LISTA">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    MinWidth="120"
+                                    Margin="0,0,40,0"
+                                    HorizontalAlignment="Right"
+                                    Text="{Binding Path=ListPrice, StringFormat=C2}"
+                                    TextAlignment="Right" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="PRECIO VENTA">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    MinWidth="120"
+                                    Margin="0,0,40,0"
+                                    HorizontalAlignment="Right"
+                                    Text="{Binding Path=SalePrice, StringFormat=C2}"
+                                    TextAlignment="Right" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="STOCK">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    MinWidth="80"
+                                    Margin="0,0,40,0"
+                                    HorizontalAlignment="Right"
+                                    Text="{Binding Path=Stock}"
+                                    TextAlignment="Right" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Barcode}" Header="CODIGO BARRA" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Provider.Name}" Header="STOCK" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </common:View.MainContent>
+</common:View>
