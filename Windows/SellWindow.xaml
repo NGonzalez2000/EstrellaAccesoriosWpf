@@ -1,0 +1,292 @@
+﻿<Window
+    x:Class="EstrellaAccesoriosWpf.Windows.SellWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:EstrellaAccesoriosWpf.Common.Controls"
+    xmlns:converters="clr-namespace:EstrellaAccesoriosWpf.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:filters="clr-namespace:EstrellaAccesoriosWpf.Filters.FiltersView"
+    xmlns:local="clr-namespace:EstrellaAccesoriosWpf.Windows"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:EstrellaAccesoriosWpf.ViewModels"
+    Title="NUEVA VENTA"
+    Width="800"
+    Height="450"
+    d:DataContext="{d:DesignInstance Type=viewmodels:SellWindowViewModel}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    WindowState="Maximized"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <converters:MoneyToDecimalConverter x:Key="MoneyConverter" />
+        <converters:PercentageToDecimalConverter x:Key="PercentageConverter" />
+    </Window.Resources>
+    <materialDesign:DialogHost DialogTheme="Inherit" Identifier="SellDialog">
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1.2*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="3*" />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        x:Name="btn_Scanner"
+                        materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                        materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                        Click="Btn_Scanner_Click"
+                        Content="ESCANEANDO"
+                        Style="{StaticResource MaterialDesignRaisedButton}" />
+
+                    <TextBox
+                        x:Name="tb_Scanner"
+                        Width="0"
+                        LostFocus="Tb_Scanner_LostFocus"
+                        TextChanged="Tb_Scanner_TextChanged" />
+                </StackPanel>
+                <filters:SellWindowFilterView Grid.Row="1" DataContext="{Binding Path=FilterViewModel}" />
+                <GroupBox
+                    Grid.Row="2"
+                    Margin="0,10,0,0"
+                    Header="PRODUCTOS"
+                    Style="{StaticResource MaterialDesignCardGroupBox}">
+                    <ListBox ItemsSource="{Binding Path=Products}" Style="{StaticResource MaterialDesignCardsListBox}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <materialDesign:Card>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="300" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image
+                                            Width="200"
+                                            Height="200"
+                                            Margin="0,0,0,10"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Source="{Binding Path=ImageSource}" />
+
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Path=Barcode}" />
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Path=Description}"
+                                            TextWrapping="WrapWithOverflow" />
+                                        <TextBlock
+                                            Grid.Column="3"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource MaterialDesign.Brush.Secondary}"
+                                            Text="{Binding Path=SalePrice, StringFormat=C2}" />
+                                        <Button
+                                            Grid.Column="4"
+                                            Margin="10"
+                                            Command="{Binding Path=DataContext.AddSellItemCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                            CommandParameter="{Binding}"
+                                            Content="AGREGAR" />
+                                    </Grid>
+                                </materialDesign:Card>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </GroupBox>
+            </Grid>
+
+            <GroupBox
+                Grid.Column="1"
+                Margin="10"
+                Header="VENTA"
+                Style="{StaticResource MaterialDesignCardGroupBox}">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <ComboBox
+                        materialDesign:HintAssist.Hint="Medio de Pago"
+                        DisplayMemberPath="Description"
+                        ItemsSource="{Binding Path=PaymentMethods}"
+                        SelectedItem="{Binding Path=Sell.PaymentMethod}"
+                        Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+
+                    <DataGrid
+                        Grid.Row="1"
+                        Margin="0,10"
+                        AutoGenerateColumns="False"
+                        HeadersVisibility="None"
+                        ItemsSource="{Binding Path=Sell.Items}">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image
+                                            Width="50"
+                                            Height="50"
+                                            Source="{Binding Path=ProductImageSource}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{Binding Path=ProductDescription}" />
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                                <controls:NumericTextBox Width="100" Text="{Binding Path=ProductCount, UpdateSourceTrigger=PropertyChanged}" />
+                                                <Button
+                                                    Width="26"
+                                                    Height="26"
+                                                    Margin="10,0"
+                                                    Command="{Binding Path=DataContext.DecreaseCountCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                                    <materialDesign:PackIcon
+                                                        Width="16"
+                                                        Height="16"
+                                                        Kind="ArrowDown" />
+                                                </Button>
+                                                <Button
+                                                    Width="26"
+                                                    Height="26"
+                                                    Command="{Binding Path=DataContext.IncreaseCountCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                                    <materialDesign:PackIcon
+                                                        Width="16"
+                                                        Height="16"
+                                                        Kind="ArrowUp" />
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Binding="{Binding Path=ProductPrice, StringFormat=C2}" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Width="26"
+                                            Height="26"
+                                            Margin="10,0"
+                                            Command="{Binding Path=DataContext.RemoveSellItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                            ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                            <materialDesign:PackIcon
+                                                Width="16"
+                                                Height="16"
+                                                Kind="Delete" />
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <DockPanel Grid.Row="2" Margin="0,10">
+                        <TextBlock
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="SUBTOTAL:" />
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            DockPanel.Dock="Right"
+                            Foreground="{StaticResource MaterialDesign.Brush.Secondary}"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="{Binding Path=Sell.SubTotalPrice, StringFormat=C2}" />
+                    </DockPanel>
+
+                    <controls:MoneyTextBox
+                        Grid.Row="3"
+                        Margin="0,5"
+                        materialDesign:HintAssist.Hint="DESCUENTO FIJO"
+                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                        Text="{Binding Path=Sell.FixedDiscount, Converter={StaticResource MoneyConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <controls:PercentageTextBox
+                        Grid.Row="4"
+                        Margin="0,5"
+                        materialDesign:HintAssist.Hint="DESCUENTO PORCENTUAL"
+                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                        Text="{Binding Path=Sell.PercentageDiscount, Converter={StaticResource PercentageConverter}, UpdateSourceTrigger=PropertyChanged}"
+                        TextAlignment="Right" />
+
+                    <DockPanel Grid.Row="5" Margin="0,10">
+                        <TextBlock
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="TOTAL:" />
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            DockPanel.Dock="Right"
+                            Foreground="{StaticResource MaterialDesign.Brush.Primary}"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="{Binding Path=Sell.TotalPrice, StringFormat=C2}" />
+                    </DockPanel>
+                    <!--<controls:MoneyTextBox
+                    Grid.Row="6"
+                    Margin="0,5"
+                    materialDesign:HintAssist.Hint="TOTAL COBRADO"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    Text="{Binding Path=Sell.TotalEarned, Converter={StaticResource MoneyConverter}, UpdateSourceTrigger=PropertyChanged}" />-->
+                    <Button
+                        Grid.Row="7"
+                        Command="{Binding Path=CloseSellCommand}"
+                        Content="GENERAR VENTA" />
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </materialDesign:DialogHost>
+
+</Window>

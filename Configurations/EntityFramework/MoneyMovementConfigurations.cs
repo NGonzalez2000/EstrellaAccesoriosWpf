@@ -16,5 +16,6 @@ internal class MoneyMovementConfigurations : IEntityTypeConfiguration<MoneyMovem
 
         builder.Property(x => x.Amount)
             .HasPrecision(18, 2);
+
     }
 }

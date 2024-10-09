@@ -53,8 +53,8 @@ public partial class Product : ObservableObject
     }
     public static Product Create(Category category, SubCategory subCategory, Provider provider)
     {
-        string assemblyPath = Directory.GetCurrentDirectory();
-        string imagePath = Path.Combine(assemblyPath, "Resources\\Images\\default_product.jpeg");
+        string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        string imagePath = Path.Combine(appData, "EstrellaWpf", "Images", "default_product.jpeg");
         return new(Guid.NewGuid(),"","","",0m,0m,0, category, subCategory, provider, imagePath);
     }
     public static Product Create(string code, string barcode, string description, decimal listPrice, decimal salePrice, int stock, Category category, SubCategory subCategory, Provider provider, string imageSource)
@@ -72,6 +72,7 @@ public partial class Product : ObservableObject
         Category = product.Category;
         SubCategory = product.SubCategory;
         Provider = product.Provider;
+        ImageSource = product.ImageSource;
     }
 #pragma warning disable CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
     private Product() { }

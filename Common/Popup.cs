@@ -12,7 +12,7 @@ public class Popup : UserControl
     Button AcceptButton = null!;
     Button CancelButton = null!;
     ContentControl ContentArea = null!;
-
+    ScrollViewer ScrollViewer = null!;
 
     public object PopupContent
     {
@@ -31,7 +31,7 @@ public class Popup : UserControl
         MinWidth = 300;
         MinHeight = 100;
         MaxWidth = 1200;
-        MaxHeight = 1000;
+        MaxHeight = 700;
     }
     protected void SetValues(object content, string header, string button)
     {
@@ -62,7 +62,14 @@ public class Popup : UserControl
             Name = "ContentArea",
             Margin = new Thickness(10)
         };
-        ContentArea.SetBinding(ContentControl.ContentProperty, new Binding("PopupContent") { Source = this });
+
+        ScrollViewer = new ScrollViewer()
+        {
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto
+        };
+        ScrollViewer.SetBinding(ContentProperty, new Binding("PopupContent") { Source = this });
+
+        ContentArea.Content = ScrollViewer;
         Grid.SetRow(ContentArea, 1);
         MainGrid.Children.Add(ContentArea);
 
@@ -84,6 +91,7 @@ public class Popup : UserControl
         Grid.SetRow(buttonsPanel, 2);
         MainGrid.Children.Add(buttonsPanel);
 
+       
         Content = MainGrid;
     }
 

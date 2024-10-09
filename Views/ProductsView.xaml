@@ -14,23 +14,31 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <common:View.ButtonsContent>
-        <StackPanel
-            Margin="10"
-            VerticalAlignment="Top"
-            Orientation="Horizontal">
-            <Button
-                Margin="10,0"
-                Command="{Binding Path=CreateCommand}"
-                Content="CREAR" />
-            <Button
-                Margin="10,0"
-                Command="{Binding Path=UpdateCommand}"
-                Content="EDITAR" />
-            <Button
-                Margin="10,0"
-                Command="{Binding Path=DeleteCommand}"
-                Content="ELIMINAR" />
-        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <StackPanel
+                Margin="10"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <Button
+                    Margin="10,0"
+                    Command="{Binding Path=CreateCommand}"
+                    Content="CREAR" />
+                <Button
+                    Margin="10,0"
+                    Command="{Binding Path=UpdateCommand}"
+                    Content="EDITAR" />
+                <Button
+                    Margin="10,0"
+                    Command="{Binding Path=DeleteCommand}"
+                    Content="ELIMINAR" />
+            </StackPanel>
+
+
+
+        </Grid>
     </common:View.ButtonsContent>
     <common:View.FilterContent>
         <filters:ProductFilterView DataContext="{Binding FilterViewModel}" />
@@ -40,8 +48,23 @@
             ItemsSource="{Binding Path=Products}"
             ScrollViewer.HorizontalScrollBarVisibility="Visible"
             SelectedItem="{Binding Path=SelectedItem}">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
             <ListView.View>
                 <GridView>
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image
+                                    Width="50"
+                                    Height="50"
+                                    Source="{Binding Path=ImageSource}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Code}" Header="CODIGO" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="DESCRIPCION" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Category.Description}" Header="CATEGORIA" />
@@ -83,7 +106,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Barcode}" Header="CODIGO BARRA" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Provider.Name}" Header="STOCK" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Provider.Name}" Header="PROVEEDOR" />
                 </GridView>
             </ListView.View>
         </ListView>

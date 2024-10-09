@@ -1,0 +1,156 @@
+﻿<common:Popup
+    x:Class="EstrellaAccesoriosWpf.Popups.SellPopup"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:EstrellaAccesoriosWpf.Common"
+    xmlns:controls="clr-namespace:EstrellaAccesoriosWpf.Common.Controls"
+    xmlns:converters="clr-namespace:EstrellaAccesoriosWpf.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:EstrellaAccesoriosWpf.Popups"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:EstrellaAccesoriosWpf.Models"
+    MinHeight="700"
+    MaxHeight="700"
+    d:DataContext="{d:DesignInstance Type=models:Sell}"
+    mc:Ignorable="d">
+    <common:Popup.PopupContent>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Productos vendidos:" />
+            <DataGrid
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                MaxHeight="300"
+                Margin="0,10"
+                AutoGenerateColumns="False"
+                BorderBrush="LightSeaGreen"
+                BorderThickness="2"
+                HeadersVisibility="None"
+                ItemsSource="{Binding Path=Items}"
+                VerticalScrollBarVisibility="Auto">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image
+                                    Width="50"
+                                    Height="50"
+                                    Source="{Binding Path=ProductImageSource}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding Path=ProductDescription}" />
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                        <TextBlock Text="Cantidad vendida:  " />
+                                        <TextBlock Text="{Binding Path=ProductCount, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Binding="{Binding Path=ProductPrice, StringFormat=C2}" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="TextAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBlock
+                Grid.Row="2"
+                Margin="0,5"
+                Text="Información adicional:" />
+            <TextBlock
+                Grid.Row="3"
+                Margin="0,5"
+                Text="Subtotal:" />
+            <TextBlock
+                Grid.Row="4"
+                Margin="0,5"
+                Text="Descuento fijo:" />
+            <TextBlock
+                Grid.Row="5"
+                Margin="0,5"
+                Text="Descuento procentual:" />
+            <TextBlock
+                Grid.Row="6"
+                Margin="0,5"
+                Text="Medio de pago:" />
+            <TextBlock
+                Grid.Row="7"
+                Margin="0,5"
+                Text="Total:" />
+            <TextBlock
+                Grid.Row="8"
+                Margin="0,5"
+                Text="Total pagado:" />
+
+            <!--  SELL DATA  -->
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="0,5"
+                HorizontalAlignment="Right"
+                Text="{Binding SubTotalPrice, StringFormat=C2}" />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="1"
+                Margin="0,5"
+                HorizontalAlignment="Right"
+                Text="{Binding FixedDiscount, StringFormat=C2}" />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="1"
+                Margin="0,5"
+                HorizontalAlignment="Right"
+                Text="{Binding PercentageDiscount, StringFormat={}{0:N2} %}" />
+            <TextBlock
+                Grid.Row="6"
+                Grid.Column="1"
+                Margin="0,5"
+                HorizontalAlignment="Right"
+                Text="{Binding PaymentMethod.Description}" />
+            <TextBlock
+                Grid.Row="7"
+                Grid.Column="1"
+                Margin="0,5"
+                HorizontalAlignment="Right"
+                Text="{Binding TotalPrice, StringFormat=C2}" />
+            <TextBlock
+                Grid.Row="8"
+                Grid.Column="1"
+                Margin="0,5"
+                HorizontalAlignment="Right"
+                Text="{Binding TotalEarned, StringFormat=C2}" />
+        </Grid>
+    </common:Popup.PopupContent>
+</common:Popup>

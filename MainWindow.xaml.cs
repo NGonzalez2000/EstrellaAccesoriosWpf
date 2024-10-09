@@ -1,4 +1,5 @@
 ﻿using EstrellaAccesoriosWpf.ViewModels;
+using EstrellaAccesoriosWpf.Windows;
 using MaterialDesignThemes.Wpf;
 using System.Diagnostics;
 using System.Windows;
@@ -18,10 +19,15 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = viewModel;
         Loaded += MainWindow_Loaded;
-
+        Closed += MainWindow_Closed;
 
         var messageQueue = (SnackbarMessageQueue)snackbarMessageQueue;
         MainSnackbar.MessageQueue = messageQueue;
+    }
+
+    private void MainWindow_Closed(object? sender, EventArgs e)
+    {
+        Application.Current.Shutdown();
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -46,9 +52,7 @@ public partial class MainWindow : Window
         MenuToggleButton.IsChecked = false;
     }
 
-    private async void MenuPopupButton_OnClick(object sender, RoutedEventArgs e)
-    {
-    }
+    
 
     private void OnCopy(object sender, ExecutedRoutedEventArgs e)
     {
@@ -85,8 +89,8 @@ public partial class MainWindow : Window
         paletteHelper.SetTheme(theme);
     }
 
-    private void OnSelectedItemChanged(object sender, DependencyPropertyChangedEventArgs e)
-        => MainScrollViewer.ScrollToHome();
+    //private void OnSelectedItemChanged(object sender, DependencyPropertyChangedEventArgs e)
+    //    => MainScrollViewer.ScrollToHome();
 
     
 }

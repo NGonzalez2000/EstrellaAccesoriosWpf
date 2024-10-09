@@ -53,7 +53,7 @@ public abstract class View : UserControl
         var mainGrid = new Grid();
         mainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
         mainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-        mainGrid.RowDefinitions.Add(new RowDefinition());
+        mainGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star)});
         mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
         mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
@@ -92,13 +92,17 @@ public abstract class View : UserControl
         Content = mainGrid;
     }
 
-    public Task LoadAsync()
+    protected void MakeViewOnlyMainContent()
+    {
+        Content = MainContent;
+    }
+
+    public async Task LoadAsync()
     {
         if (DataContext is ViewModel vm)
         {
-            return vm.LoadCommand.ExecuteAsync(this);
+            await vm.LoadCommand.ExecuteAsync(this);
         }
-        return Task.CompletedTask;
     }
     public async Task Unload()
     {

@@ -39,6 +39,11 @@ namespace EstrellaAccesoriosWpf
             {
                 Directory.CreateDirectory(appImagePath);
             }
+            string appQrsPath = Path.Combine(appPath,"Qrs");
+            if (!Directory.Exists(appQrsPath))
+            {
+                Directory.CreateDirectory(appQrsPath);
+            }
         }
 
         private static void ConfigureServices(IConfiguration configuration, IServiceCollection services)
@@ -61,6 +66,11 @@ namespace EstrellaAccesoriosWpf
 
         protected override async void OnExit(ExitEventArgs e)
         {
+            foreach (Window window in Current.Windows.OfType<Window>())
+            {
+                window.Close();
+            }
+
             await _host.StopAsync();
             _host.Dispose();
 

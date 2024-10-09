@@ -1,9 +1,12 @@
 ﻿using EstrellaAccesoriosWpf.Common;
+using EstrellaAccesoriosWpf.Models.Common;
+using EstrellaAccesoriosWpf.Windows;
 using MaterialDesignThemes.Wpf;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using System.Windows;
 
 namespace EstrellaAccesoriosWpf;
 
@@ -12,7 +15,11 @@ public static class DependencyInjection
     public static IServiceCollection AddConfigurations(this IServiceCollection services)
     {
         services.AddTransient<MainWindow>();
+        services.AddTransient<SellWindow>();
+        services.AddTransient<StockWindow>();
         services.AddSingleton<ISnackbarMessageQueue, SnackbarMessageQueue>((x) => new SnackbarMessageQueue(TimeSpan.FromSeconds(3)));
+
+        services.AddSingleton<ConfigurationFile>();
         return services;
     }
     public static IServiceCollection AddPersistance(this IServiceCollection services, IConfiguration configuration)

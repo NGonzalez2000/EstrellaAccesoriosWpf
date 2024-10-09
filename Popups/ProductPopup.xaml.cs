@@ -1,5 +1,6 @@
 ﻿using EstrellaAccesoriosWpf.Common;
 using EstrellaAccesoriosWpf.Models;
+using EstrellaAccesoriosWpf.Models.Common;
 using MaterialDesignThemes.Wpf;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Controls;
@@ -42,7 +43,7 @@ public partial class ProductPopup : Popup
 
     public async Task<bool> Update()
     {
-        SetHeader("EDITAR CATEGORIA");
+        SetHeader("EDITAR PRODUCTO");
         object? response = await DialogHost.Show(this, "RootDialog");
         if (response is bool b && b)
         {
@@ -62,5 +63,22 @@ public partial class ProductPopup : Popup
             int indx = subCategories.IndexOf(subCategories.First(sc => sc.Description == "SIN SUBCATEGORIA"));
             cb_SubCategory.SelectedIndex = indx;
         }
+    }
+
+    private void SelectImage_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        ImageManager imageManager = new();
+        if(DataContext is not Product product)
+        {
+            return;
+        }
+
+        string newImage = imageManager.GetImage($"{product.Id}_image.jpeg");
+        if (string.IsNullOrEmpty(newImage))
+        {
+            return;
+        }
+
+        product.ImageSource = newImage;
     }
 }

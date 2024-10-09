@@ -4,6 +4,7 @@ using EstrellaAccesoriosWpf.Common;
 using EstrellaAccesoriosWpf.Filters.FiltersViewModels;
 using EstrellaAccesoriosWpf.Models;
 using EstrellaAccesoriosWpf.Popups;
+using EstrellaAccesoriosWpf.Windows;
 using MaterialDesignThemes.Wpf;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
@@ -21,11 +22,12 @@ public partial class ProductViewModel : ViewModel
     private List<Category> categories;
     private List<Provider> providers;
 
+
     [ObservableProperty]
     private Product? selectedItem;
 
     [ObservableProperty]
-    private ProductFilterViewModel filterViewModel;
+    private ProductFilterViewModel filterViewModel = null!;
 
     [ObservableProperty]
     private ObservableCollection<Product> products;
@@ -39,8 +41,7 @@ public partial class ProductViewModel : ViewModel
         Products = [];
         categories = [];
         providers = [];
-        filterViewModel = new(dbContext);
-        filterViewModel.PropertyChanged += OnFilterViewModelPropertyChanged;
+        
     }
     private void OnFilterViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -48,6 +49,8 @@ public partial class ProductViewModel : ViewModel
     }
     protected override async Task LoadAsync()
     {
+        FilterViewModel = new(_dbContext);
+        FilterViewModel.PropertyChanged += OnFilterViewModelPropertyChanged;
         Products = new(await _dbContext.Products.ToListAsync());
         categories = await _dbContext.Categories.Include(c => c.SubCategories).ToListAsync();
         providers = await _dbContext.Providers.ToListAsync();
@@ -72,10 +75,21 @@ public partial class ProductViewModel : ViewModel
         Category category = categories.First(c => c.Description == "SIN CATEGORIA");
         SubCategory subCategory = category.SubCategories.First(sc => sc.Description == "SIN SUBCATEGORIA");
 
+        var maxBarCode = _dbContext.Products
+            .Where(p => p.Barcode.StartsWith("EA"))
+            .AsEnumerable()
+            .Select(p => long.Parse(p.Barcode[2..]))
+            .Max();
+
         Product newItem = Product.Create(category, subCategory, provider);
+        newItem.Barcode = $"EA{++maxBarCode:D13}";
         ProductPopup popup = new(newItem, _dbContext);
         bool response = await popup.Create();
-        if (!response) return;
+        if (!response)
+        {
+            //ImageManager.DeleteImage(newItem.ImageSource);
+            return;
+        }
 
 
         _dbContext.Products.Add(newItem);
@@ -144,7 +158,8 @@ public partial class ProductViewModel : ViewModel
 
         _messageQueue.Enqueue("Producto eliminado con éxito.");
     }
-
+    
+   
     protected override void Refresh()
     {
         collectionView.SortDescriptions.Clear();

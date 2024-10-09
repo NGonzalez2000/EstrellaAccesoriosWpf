@@ -11,5 +11,17 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <Grid />
+    <common:View.MainContent>
+        <Grid
+            Width="500"
+            Height="500"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Image Source="../Resources/Images/UnderDevelopment.png" />
+        </Grid>
+    </common:View.MainContent>
 </common:View>

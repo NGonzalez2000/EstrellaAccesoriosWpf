@@ -177,18 +177,6 @@
                                         Margin="10,10,0,0"
                                         Text="RTL" />
                                 </Grid>
-
-                                <Separator />
-
-                                <Button Click="MenuPopupButton_OnClick" Content="Hello World" />
-
-                                <Button Click="MenuPopupButton_OnClick" Content="Nice Popup" />
-
-                                <Button Content="Can't Touch This" IsEnabled="False" />
-
-                                <Separator />
-
-                                <Button Click="MenuPopupButton_OnClick" Content="Goodbye" />
                             </StackPanel>
                         </materialDesign:PopupBox>
 
@@ -209,18 +197,18 @@
                     </Grid.RowDefinitions>
 
 
-                    <ScrollViewer
+                    <!--<ScrollViewer
                         x:Name="MainScrollViewer"
                         Grid.Row="1"
                         materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
                         HorizontalScrollBarVisibility="{Binding SelectedItem.HorizontalScrollBarVisibilityRequirement, FallbackValue=Disabled}"
-                        VerticalScrollBarVisibility="{Binding SelectedItem.VerticalScrollBarVisibilityRequirement, FallbackValue=Disabled}">
-                        <ContentControl
-                            Margin="{Binding MarginRequirement, FallbackValue=16}"
-                            Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"
-                            DataContext="{Binding SelectedItem}"
-                            DataContextChanged="OnSelectedItemChanged" />
-                    </ScrollViewer>
+                        VerticalScrollBarVisibility="{Binding SelectedItem.VerticalScrollBarVisibilityRequirement, FallbackValue=Disabled}">-->
+                    <ContentControl
+                        Grid.Row="1"
+                        Margin="{Binding MarginRequirement, FallbackValue=16}"
+                        Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"
+                        DataContext="{Binding SelectedItem}" />
+                    <!--</ScrollViewer>-->
 
                     <materialDesign:Snackbar x:Name="MainSnackbar" Grid.Row="1" />
                 </Grid>

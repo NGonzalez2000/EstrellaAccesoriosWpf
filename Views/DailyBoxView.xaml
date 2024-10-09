@@ -3,13 +3,103 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:common="clr-namespace:EstrellaAccesoriosWpf.Common"
+    xmlns:converters="clr-namespace:EstrellaAccesoriosWpf.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:filters="clr-namespace:EstrellaAccesoriosWpf.Filters.FiltersView"
     xmlns:local="clr-namespace:EstrellaAccesoriosWpf.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:EstrellaAccesoriosWpf.ViewModels"
     Title="CAJA"
+    d:DataContext="{d:DesignInstance Type=viewModels:DailyBoxViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:DateTimeToDateOnlyConverter x:Key="DateTimeConverter" />
+    </UserControl.Resources>
+    <common:View.ButtonsContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel
+                Margin="10"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <Button
+                    Margin="10,0"
+                    Command="{Binding Path=CreateCommand}"
+                    Content="CREAR" />
+            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-    <Grid />
+                <DatePicker
+                    Margin="15,15,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    materialDesign:HintAssist.Hint="Fecha"
+                    DisplayDateEnd="{Binding Path=DateEnd, Converter={StaticResource DateTimeConverter}}"
+                    DisplayDateStart="{Binding Path=DateStart, Converter={StaticResource DateTimeConverter}}"
+                    SelectedDate="{Binding Path=BoxDate, Converter={StaticResource DateTimeConverter}}"
+                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
+
+                <Grid Grid.Column="1" VerticalAlignment="Bottom">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="0,10" Text="Apertura:" />
+                    <TextBlock Grid.Row="1" Text="Cierre:" />
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="0,10"
+                        Text="{Binding PreviousCashClose.Balance, StringFormat=C2}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="{Binding ActualCashClose.Balance, StringFormat=C2}" />
+
+                </Grid>
+
+                <StackPanel
+                    Grid.Column="2"
+                    VerticalAlignment="Bottom"
+                    Orientation="Horizontal">
+                    <TextBlock Margin="10,0" Text="BALANCE: " />
+                    <TextBlock Text="{Binding Path=Balance, StringFormat=C2}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </common:View.ButtonsContent>
+    <common:View.FilterContent>
+        <filters:MoneyMovementFilterView DataContext="{Binding FilterViewModel}" />
+    </common:View.FilterContent>
+    <common:View.MainContent>
+        <ListView
+            ItemsSource="{Binding Path=MoneyMovements}"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible"
+            SelectedItem="{Binding Path=SelectedItem}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="DESCRIPCION" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=MoneyMovementType.Description}" Header="OPERACION" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Amount, StringFormat=C2}" Header="MONTO" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=PaymentMethod.Description}" Header="MEDIO DE PAGO" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </common:View.MainContent>
 </common:View>

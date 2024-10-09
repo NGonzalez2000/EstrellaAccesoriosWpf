@@ -44,6 +44,10 @@ public partial class MainViewModel : ViewModel
             {
                 Tabs.Move(i, 0);
             }
+            if (Tabs[i].Content!.Title == "CONFIGURACIONES")
+            {
+                Tabs.Move(i, Tabs.Count - 1);
+            }
         }
 
         SelectedItem = Tabs.FirstOrDefault();

@@ -27,6 +27,12 @@
                 CharacterCasing="Upper"
                 Text="{Binding ProductCode, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox
+                Grid.Column="1"
+                Margin="0,10"
+                materialDesign:HintAssist.Hint="Codigo Barra"
+                CharacterCasing="Upper"
+                Text="{Binding ProductBarcode, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox
                 Margin="0,10"
                 materialDesign:HintAssist.Hint="Descripción"
                 CharacterCasing="Upper"

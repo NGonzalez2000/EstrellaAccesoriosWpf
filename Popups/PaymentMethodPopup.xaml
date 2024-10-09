@@ -1,0 +1,75 @@
+﻿<common:Popup
+    x:Class="EstrellaAccesoriosWpf.Popups.PaymentMethodPopup"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:EstrellaAccesoriosWpf.Common"
+    xmlns:controls="clr-namespace:EstrellaAccesoriosWpf.Common.Controls"
+    xmlns:converters="clr-namespace:EstrellaAccesoriosWpf.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:EstrellaAccesoriosWpf.Popups"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:EstrellaAccesoriosWpf.Models"
+    d:DataContext="{d:DesignInstance models:PaymentMethod}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <common:Popup.Resources>
+        <converters:PercentageToDecimalConverter x:Key="PercentageConverter" />
+    </common:Popup.Resources>
+    <common:Popup.PopupContent>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="NOMBRE:" />
+            <TextBox
+                Grid.Column="1"
+                CharacterCasing="Upper"
+                Text="{Binding Path=Description}" />
+            <Label
+                Grid.Row="1"
+                Margin="0,15"
+                VerticalContentAlignment="Center"
+                Content="PORCENTAJE:" />
+            <controls:PercentageTextBox
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Style="{StaticResource MaterialDesignTextBox}"
+                Text="{Binding Path=Amount, Converter={StaticResource PercentageConverter}, UpdateSourceTrigger=PropertyChanged}"
+                TextAlignment="Right" />
+            <Label
+                Grid.Row="2"
+                Margin="0,15"
+                VerticalAlignment="Center"
+                Content="ES DESCUENTO:" />
+            <CheckBox
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="0,5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                IsChecked="{Binding IsDiscount}" />
+            <Label
+                Grid.Row="3"
+                Margin="0,15"
+                VerticalAlignment="Center"
+                Content="MODIFICA CAJA:" />
+            <CheckBox
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="0,5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                IsChecked="{Binding ModifyCash}" />
+        </Grid>
+    </common:Popup.PopupContent>
+</common:Popup>

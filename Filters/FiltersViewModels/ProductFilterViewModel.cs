@@ -15,6 +15,9 @@ public partial class ProductFilterViewModel : BaseFilter
     string productDescription = string.Empty;
 
     [ObservableProperty]
+    string productBarcode = string.Empty;
+
+    [ObservableProperty]
     List<Category> categories;
 
     [ObservableProperty]
@@ -54,6 +57,7 @@ public partial class ProductFilterViewModel : BaseFilter
 
         bool ret = product.Code.Contains(ProductCode);
         ret &= product.Description.Contains(ProductDescription);
+        ret &= product.Barcode.Contains(ProductBarcode);
         
         if (SelectedCategory != null)
         {

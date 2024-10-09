@@ -1,0 +1,67 @@
+﻿<common:View
+    x:Class="EstrellaAccesoriosWpf.Views.PaymentMethodView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="clr-namespace:EstrellaAccesoriosWpf.Common"
+    xmlns:converters="clr-namespace:EstrellaAccesoriosWpf.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:filters="clr-namespace:EstrellaAccesoriosWpf.Filters.FiltersView"
+    xmlns:local="clr-namespace:EstrellaAccesoriosWpf.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:EstrellaAccesoriosWpf.ViewModels"
+    Title="MEDIOS DE PAGO"
+    d:DataContext="{d:DesignInstance Type=viewmodels:PaymentMethodViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <common:View.Resources>
+        <converters:BoolToIconConverter x:Key="IconConverter" />
+    </common:View.Resources>
+    <common:View.ButtonsContent>
+        <StackPanel
+            Margin="10"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
+            <Button
+                Margin="10,0"
+                Command="{Binding Path=CreateCommand}"
+                Content="CREAR" />
+            <Button
+                Margin="10,0"
+                Command="{Binding Path=UpdateCommand}"
+                Content="EDITAR" />
+            <Button
+                Margin="10,0"
+                Command="{Binding Path=DeleteCommand}"
+                Content="ELIMINAR" />
+        </StackPanel>
+    </common:View.ButtonsContent>
+    <common:View.FilterContent>
+        <filters:PaymentMethodFilterView DataContext="{Binding FilterViewModel}" />
+    </common:View.FilterContent>
+    <common:View.MainContent>
+        <ListView ItemsSource="{Binding Path=PaymentMethods}" SelectedItem="{Binding Path=SelectedItem}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Header="DESCRIPCION" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Amount, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N2} %}" Header="PORCENTAJE" />
+                    <GridViewColumn Header="ES DESCUENTO">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon HorizontalAlignment="Right" Kind="{Binding IsDiscount, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IconConverter}}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="MODIFICA CAJA">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon HorizontalAlignment="Right" Kind="{Binding ModifyCash, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IconConverter}}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </common:View.MainContent>
+</common:View>
